@@ -1,0 +1,5 @@
+connexion
+marshmallow
+flask
+flask-sqlalchemy
+flask-marshmallow[sqlalchemy]
