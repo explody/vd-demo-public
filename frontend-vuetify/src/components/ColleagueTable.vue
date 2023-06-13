@@ -5,7 +5,7 @@
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table-server id="people-table" v-model:items-per-page="itemsPerPage" :headers="headers"
-            :items-length="totalItems" :items="items" :loading="loading" :search="search" class="elevation-1"
+            :items-length="totalItems" :items="serverItems" :loading="loading" :search="search" class="elevation-1"
             item-value="preferred_name" @update:options="loadPeople" @click="handleClick">
 
             <template v-slot:top>
