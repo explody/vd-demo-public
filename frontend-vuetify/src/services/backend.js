@@ -6,17 +6,17 @@ const Backend = {
         return new Promise(resolve => {
             setTimeout(async () => {
 
-                console.log({
-                    in: "BACKEND",
-                    baseUrl: baseUrl,
-                    params: params,
-                    page: page,
-                    itemsPerPage: itemsPerPage,
-                    groupBy: groupBy,
-                    sortBy: sortBy,
-                    column_filter: column_filter,
-                    q: search
-                })
+                // console.log({
+                //     in: "BACKEND",
+                //     baseUrl: baseUrl,
+                //     params: params,
+                //     page: page,
+                //     itemsPerPage: itemsPerPage,
+                //     groupBy: groupBy,
+                //     sortBy: sortBy,
+                //     column_filter: column_filter,
+                //     q: search
+                // })
 
                 params.page = page
                 params.limit = itemsPerPage
@@ -36,11 +36,11 @@ const Backend = {
                 const url = `${baseUrl}?${query}`
                 const response = await axios.get(url)
                 const data = response.data
-
                 resolve({ items: data.data, total: data._meta.count })
             }, 500)
         })
     },
+    
 }
 
 export default Backend

@@ -38,7 +38,7 @@
                                 </a>
                             </div>
                             <div class="d-flex flex-column justify-content-center">
-                                <h6 class="mb-0 text-sm">{{ item.selectable.preferred_name }} {{ item.selectable.last_name
+                                <h6 class="mb-0 text-sm">{{ item.selectable.additional_name }} {{ item.selectable.last_name
                                 }}</h6>
                                 <p class="text-xs text-secondary mb-0"><a
                                         :href="`mailto:${item.selectable.primary_email}`">{{
@@ -56,10 +56,12 @@
 </template>
   
 <script>
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import Backend from '/src/services/backend.js';
 import EventBus from '../services/events.ts'
 import { ref } from 'vue'
+
+
 
 export default {
     data: () => ({
@@ -79,7 +81,8 @@ export default {
         serverItems: ref([]),
         loading: true,
         totalItems: 0,
-        route: useRoute()
+        route: useRoute(),
+
     }),
     methods: {
         async loadPeople({ page, itemsPerPage, sortBy, groupBy, search }) {
@@ -90,23 +93,18 @@ export default {
             const baseUrl = "http://localhost:8000/api/people"
             const params = { expand: "primary_company" }
 
-            if ('company' in this.route.params) {
-                column_filter = `company_roles..company_id:${this.route.params.company}|primary:1`
-            }
 
             // debug
-            console.log("ROUTE")
-            console.log(this.route.params)
-            console.log(column_filter)
+            console.log("loadPeople this.$route.params")
+            console.log(this.$route.params)
+            console.log("loadPeople this.$router.currentRoute.value")
+            console.log(this.$router.currentRoute.value)
+            console.log("loadPeople this.$router.currentRoute")
+            console.log(this.$router.currentRoute)
 
-            // console.log({
-            //     in: "loadPeople",
-            //     page: page,
-            //     itemsPerPage: itemsPerPage,
-            //     groupBy: groupBy,
-            //     sortBy: sortBy,
-            //     search: search
-            // })
+            if ('company' in this.$route.params) {
+                column_filter = `company_roles..company_id:${this.route.params.company}|primary:1`
+            }
 
             this.loading = true
 
@@ -115,13 +113,13 @@ export default {
                 this.items = items
                 this.totalItems = total
                 this.loading = false
-                console.log(this.serverItems) // This updates when the companySwitch event fires, but the table doesn't refresh
             })
         },
         handleClick(...args) {
             // Just for testing
             console.log("row clicked")
-            console.log(args)
+            console.log(this.$route.params)
+
         }
     },
     setup() {
@@ -130,14 +128,7 @@ export default {
     mounted() {
         // this works fine to get events from the CompanyNav when a list item is clicked
         EventBus.addEventListener('companySwitch', (event) => {
-            console.log("EVENT")
-            console.log(this)
-
-            // This works to fire the method, which does fetch data, but the table does NOT update
             this.loadPeople(event.data)
-
-            // This *does* trigger a table update
-            // this.serverItems = []
         })
     }
 }

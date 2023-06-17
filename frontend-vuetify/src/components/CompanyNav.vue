@@ -35,7 +35,7 @@ export default {
                 this.totalItems = total
             });
         },
-        companyNavClick(action) {
+        async companyNavClick(action) {
             console.log("Sending companySwitch event")
             EventBus.emit('companySwitch', { page: 0, itemsPerPage: 10, sortBy: 'first_name' })
         }
